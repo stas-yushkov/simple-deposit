@@ -5,11 +5,8 @@ const total = function (days) {
   for (let i = 1; i <= days; i+=1) {
     sum += i;
   }
-  return `sum: ${sum}, days: ${days} `;
+  return `Days: ${days} sum: ${sum}, \nDays: 365 sum:  66795`;
 }
 
-//const days=365/2;
 
 alert( total(days) );
-alert(total(365) );
-  //Math.max(a=for (const number of numbers){number}));
