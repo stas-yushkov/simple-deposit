@@ -5,9 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JS</title>
+    <link rel="stylesheet " href="./css/styles.css" title="" type="text/css" />
   </head>
   <body>
-   
+    <h1>Розрахувати суму чисел від 1 до days</h1>
+   <code>//const numbers = [-11, 11, 0, 2, 4]
+const days = prompt('days');
+const total = function (days) {
+  let sum =0;
+  for (let i = 1; i <= days; i+=1) {
+    sum += i;
+  }
+  return `Days: ${days} sum: ${sum}, \nDays: 365 sum:  66795`;
+}
+
+
+alert( total(days) );
+</code>
     <script src="./js/test.js"></script>
 
  
