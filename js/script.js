@@ -5,7 +5,7 @@ const total = function (inputDays) {
   let sum =0;
   let message = ''
   if (!days) {
-    return `Не плануєш збирати? Шкода. \nБо за 365 днів набирав би суму: 66795.`
+    return `Не плануєш збирати? Шкода. \nБо за 365 днів міг би назбирати суму: 66795.`
   }
   for (let i = 1; i <= days; i+=1) {
     sum += i;
