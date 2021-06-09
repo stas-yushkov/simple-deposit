@@ -9,18 +9,31 @@ const refs = {
 
 const INITIAL_NUMBER_OF_DAYS = 365;
 const daysCounter = {
-  numberOfDays: 0,
-  updateInputsUI(newNumberOfDays) {
+  updateInputsUI(event, newNumberOfDays) {
+    if (event) {
+      if (Number(event.currentTarget.value) + 1 > Number(refs.input.max)) {
+        daysCounter.updateInputsUI('', refs.input.max);
+      }
+
+      if (
+        Number(event.currentTarget.value) - 1 < Number(refs.input.min) ||
+        event.currentTarget.value === '' ||
+        newNumberOfDays === ''
+      ) {
+        daysCounter.updateInputsUI('', 1);
+      }
+    }
+
     refs.inputRange.value = newNumberOfDays;
     refs.input.value = newNumberOfDays;
+    redrawResultMessage();
   },
 };
 
-daysCounter.updateInputsUI(INITIAL_NUMBER_OF_DAYS);
+daysCounter.updateInputsUI('', INITIAL_NUMBER_OF_DAYS);
 
 refs.inputRange.addEventListener('input', e => {
-  daysCounter.updateInputsUI(e.currentTarget.value);
-  redrawResultMessage();
+  daysCounter.updateInputsUI(e, e.currentTarget.value);
 });
 
 refs.input.addEventListener('input', e => {
@@ -30,19 +43,22 @@ refs.input.addEventListener('input', e => {
   //   Number(e.currentTarget.value),
   // );
   // console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
-  if (Number(e.currentTarget.value) + 1 > Number(refs.input.max)) {
-    daysCounter.updateInputsUI(refs.input.max);
-  }
 
-  if (
-    Number(e.currentTarget.value) - 1 < Number(refs.input.min) ||
-    e.currentTarget.value === ''
-  ) {
-    daysCounter.updateInputsUI(1);
-  }
+  // if (Number(e.currentTarget.value) + 1 > Number(refs.input.max)) {
+  //   daysCounter.updateInputsUI(refs.input.max);
+  // }
 
-  daysCounter.updateInputsUI(e.currentTarget.value);
-  redrawResultMessage();
+  // if (
+  //   Number(e.currentTarget.value) - 1 < Number(refs.input.min) ||
+  //   e.currentTarget.value === ''
+  // ) {
+  //   daysCounter.updateInputsUI(1);
+  // }
+
+  console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
+  console.log('🚀 ~ e', e);
+
+  daysCounter.updateInputsUI(e, e.currentTarget.value);
 });
 
 // refs.form.addEventListener('submit', onFormSubmit);
@@ -51,13 +67,14 @@ refs.addBtn.addEventListener('click', onMathBtnsClick);
 refs.subBtn.addEventListener('click', onMathBtnsClick);
 
 function onMathBtnsClick(e) {
+  let newValue = 0;
   switch (e.currentTarget.dataset.action) {
     case 'add':
       if (Number(refs.input.value) + 1 > Number(refs.input.max)) {
         return;
       }
 
-      refs.input.value = Number(refs.input.value) + 1;
+      newValue = Number(refs.input.value) + 1;
       break;
 
     case 'sub':
@@ -70,8 +87,7 @@ function onMathBtnsClick(e) {
     default:
       break;
   }
-  daysCounter.updateInputsUI(refs.input.value);
-  redrawResultMessage();
+  daysCounter.updateInputsUI('', refs.input.value);
 }
 
 function total(days) {
