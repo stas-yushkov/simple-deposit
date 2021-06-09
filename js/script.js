@@ -8,7 +8,7 @@ const refs = {
 };
 
 const INITIAL_NUMBER_OF_DAYS = 365;
-const dayCounter = {
+const daysCounter = {
   numberOfDays: 0,
   updateInputsUI(newNumberOfDays) {
     refs.inputRange.value = newNumberOfDays;
@@ -16,20 +16,36 @@ const dayCounter = {
   },
 };
 
-dayCounter.updateInputsUI(INITIAL_NUMBER_OF_DAYS);
+daysCounter.updateInputsUI(INITIAL_NUMBER_OF_DAYS);
 
 refs.inputRange.addEventListener('input', e => {
-  dayCounter.updateInputsUI(e.currentTarget.value);
+  daysCounter.updateInputsUI(e.currentTarget.value);
+  redrawResultMessage();
 });
 
 refs.input.addEventListener('input', e => {
-  if (e.currentTarget.value === '') {
-    dayCounter.updateInputsUI(1);
+  // console.log('🚀 ~ +e.currentTarget.value', +e.currentTarget.value);
+  // console.log(
+  //   '🚀 ~ Number(e.currentTarget.value)',
+  //   Number(e.currentTarget.value),
+  // );
+  // console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
+  if (Number(e.currentTarget.value) + 1 > Number(refs.input.max)) {
+    daysCounter.updateInputsUI(refs.input.max);
   }
-  dayCounter.updateInputsUI(e.currentTarget.value);
+
+  if (
+    Number(e.currentTarget.value) - 1 < Number(refs.input.min) ||
+    e.currentTarget.value === ''
+  ) {
+    daysCounter.updateInputsUI(1);
+  }
+
+  daysCounter.updateInputsUI(e.currentTarget.value);
+  redrawResultMessage();
 });
 
-refs.form.addEventListener('submit', onFormSubmit);
+// refs.form.addEventListener('submit', onFormSubmit);
 
 refs.addBtn.addEventListener('click', onMathBtnsClick);
 refs.subBtn.addEventListener('click', onMathBtnsClick);
@@ -40,6 +56,7 @@ function onMathBtnsClick(e) {
       if (Number(refs.input.value) + 1 > Number(refs.input.max)) {
         return;
       }
+
       refs.input.value = Number(refs.input.value) + 1;
       break;
 
@@ -53,11 +70,8 @@ function onMathBtnsClick(e) {
     default:
       break;
   }
-  updateInputRangeUI();
-}
-
-function updateInputRangeUI() {
-  refs.inputRange.value = refs.input.value;
+  daysCounter.updateInputsUI(refs.input.value);
+  redrawResultMessage();
 }
 
 function total(days) {
@@ -94,17 +108,22 @@ function total(days) {
   return `За ${days} ${daysText} назбираєш сумму: ${sum} грн.`;
 }
 
-function onFormSubmit(event) {
-  // console.log(event);
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  // formData.forEach((value, name) => {
-  //   console.log(name, value);
-  // });
-  const days = Number(formData.get('days'));
-  // console.log(days);
-  // console.log(total(days));
+// function onFormSubmit(event) {
+//   // console.log(event);
+//   event.preventDefault();
+//   const formData = new FormData(event.currentTarget);
+//   // formData.forEach((value, name) => {
+//   //   console.log(name, value);
+//   // });
+//   const days = Number(formData.get('days'));
+//   // console.log(days);
+//   // console.log(total(days));
+//   refs.result.textContent = total(days);
+// }
+
+function redrawResultMessage() {
+  // const days = Number(new FormData(refs.form).get('days'));
+  const days = new FormData(refs.form).get('days');
+
   refs.result.textContent = total(days);
 }
-
-function setNumberOfDaysToVerified(e) {}
