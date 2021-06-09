@@ -8,17 +8,25 @@ const refs = {
 };
 
 const INITIAL_NUMBER_OF_DAYS = 365;
-let numberOfDays = INITIAL_NUMBER_OF_DAYS;
+const dayCounter = {
+  numberOfDays: 0,
+  updateInputsUI(newNumberOfDays) {
+    refs.inputRange.value = newNumberOfDays;
+    refs.input.value = newNumberOfDays;
+  },
+};
 
-refs.input.value = INITIAL_NUMBER_OF_DAYS;
-updateInputRangeUI();
+dayCounter.updateInputsUI(INITIAL_NUMBER_OF_DAYS);
 
 refs.inputRange.addEventListener('input', e => {
-  refs.input.value = e.currentTarget.value;
+  dayCounter.updateInputsUI(e.currentTarget.value);
 });
 
 refs.input.addEventListener('input', e => {
-  refs.inputRange.value = e.currentTarget.value;
+  if (e.currentTarget.value === '') {
+    dayCounter.updateInputsUI(1);
+  }
+  dayCounter.updateInputsUI(e.currentTarget.value);
 });
 
 refs.form.addEventListener('submit', onFormSubmit);
@@ -52,38 +60,33 @@ function updateInputRangeUI() {
   refs.inputRange.value = refs.input.value;
 }
 
-function total(inputDays) {
-  const days = Number(inputDays);
+function total(days) {
+  // const days = Number(days);
   let sum = 0;
 
-  // if (!days) {
-  //   return `<p>Не плануєш збирати? Шкода. \nБо за 365 днів міг би назбирати суму: 66795.</p>`;
-  // }
   for (let i = 1; i <= days; i += 1) {
     sum += i;
   }
   // message = `За ${days} дня/днів/день назбираєш сумму: ${sum}, \nА за 365 днів: 66795.`;
   let daysText = 'день';
   (() => {
-    console.log(inputDays);
-    if (inputDays > 1 && inputDays < 5) {
+    const digits = days.toString().split('');
+    const lastDigit = Number(digits.pop());
+    const preLastDigit = Number(digits[digits.length - 1]);
+    console.log(days);
+    if (days > 1 && days < 5) {
       daysText = 'дня';
     }
-    if (inputDays > 5) {
+    if (days >= 5) {
       daysText = 'днів';
     }
-    if (inputDays > 20) {
-      // daysText = 'днів';
-      const lastDigit = Number(+inputDays.toString().split('').pop());
+    if (days > 20 && preLastDigit !== 1) {
       if (lastDigit === 1) {
         daysText = 'день';
       }
       if (lastDigit > 1 && lastDigit < 5) {
         daysText = 'дня';
       }
-      // TODO: переделать на анализ двух последних цифр
-      // https://stackoverflow.com/questions/32695991/how-to-get-last-digit-of-number
-      // https://ukr-lifehacks.ed-era.com/rozdil-9/zvyazok_chislivnykiv
     }
   })();
   console.log(daysText);
@@ -95,11 +98,13 @@ function onFormSubmit(event) {
   // console.log(event);
   event.preventDefault();
   const formData = new FormData(event.currentTarget);
-  formData.forEach((value, name) => {
-    // console.log(name, value);
-  });
-  const days = formData.get('days');
+  // formData.forEach((value, name) => {
+  //   console.log(name, value);
+  // });
+  const days = Number(formData.get('days'));
   // console.log(days);
-  console.log(total(days));
+  // console.log(total(days));
   refs.result.textContent = total(days);
 }
+
+function setNumberOfDaysToVerified(e) {}
