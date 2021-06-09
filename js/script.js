@@ -7,7 +7,10 @@ const refs = {
   subBtn: document.querySelector('button[data-action="sub"]'),
 };
 
-refs.input.value = 365;
+const INITIAL_NUMBER_OF_DAYS = 365;
+let numberOfDays = INITIAL_NUMBER_OF_DAYS;
+
+refs.input.value = INITIAL_NUMBER_OF_DAYS;
 updateInputRangeUI();
 
 refs.inputRange.addEventListener('input', e => {
