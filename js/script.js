@@ -21,15 +21,21 @@
 // document.body.insertAdjacentHTML('beforeend', markup);
 
 const formRef = document.querySelector('.js-small-form');
-console.log('🚀 ~  formRef', formRef);
 const imgRef = document.querySelector('.js-image');
-console.log('🚀 ~  imgRef', imgRef);
 const inputRef = document.querySelector('#days');
-console.log('🚀 ~  inputRef', inputRef);
+const inputRangeRef = document.querySelector('#days-range');
 const resultRef = document.querySelector('.js-result');
-console.log('🚀 ~  resultRef', resultRef);
 
 inputRef.value = 365;
+inputRangeRef.value = inputRef.value;
+
+inputRangeRef.addEventListener('input', e => {
+  inputRef.value = e.currentTarget.value;
+});
+
+inputRef.addEventListener('input', e => {
+  inputRangeRef.value = e.currentTarget.value;
+});
 
 formRef.addEventListener('submit', event => {
   event.preventDefault();
