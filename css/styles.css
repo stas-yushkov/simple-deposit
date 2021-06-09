@@ -1,5 +1,27 @@
+:root {
+  --main-margin: 30px;
+}
+
 body {
   background-color: rgb(61, 61, 61);
   color: white;
   font-family: 'Montserrat', sans-serif;
+}
+
+main {
+  margin-left: var(--main-margin);
+  margin-right: var(--main-margin);
+  text-align: center;
+}
+
+.thumb {
+  /* <div class="thumb">
+        <img
+          src="https://picsum.photos/1200/300"
+          alt="some image"
+          width="1200"
+        />
+      </div> */
+  min-height: 300px;
+  background-image: url('https://picsum.photos/1200/300');
 }
