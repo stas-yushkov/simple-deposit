@@ -8,57 +8,28 @@ const refs = {
 };
 
 const INITIAL_NUMBER_OF_DAYS = 365;
-const daysCounter = {
-  updateInputsUI(inputObject, newNumberOfDays) {
-    if (inputObject) {
-      if (Number(inputObject.value) + 1 > Number(refs.input.max)) {
-        daysCounter.updateInputsUI('', refs.input.max);
-      }
 
-      if (
-        Number(inputObject.value) - 1 < Number(refs.input.min) ||
-        inputObject.value === '' ||
-        newNumberOfDays === ''
-      ) {
-        daysCounter.updateInputsUI('', 1);
-      }
-    }
-
-    refs.inputRange.value = newNumberOfDays;
-    refs.input.value = newNumberOfDays;
-    redrawResultMessage();
-  },
-};
-
-daysCounter.updateInputsUI('', INITIAL_NUMBER_OF_DAYS);
+updateInputsUI(INITIAL_NUMBER_OF_DAYS);
 
 refs.inputRange.addEventListener('input', e => {
-  daysCounter.updateInputsUI(e.currentTarget, e.currentTarget.value);
+  updateInputsUI(e.currentTarget.value);
 });
 
 refs.input.addEventListener('input', e => {
-  // console.log('🚀 ~ +e.currentTarget.value', +e.currentTarget.value);
-  // console.log(
-  //   '🚀 ~ Number(e.currentTarget.value)',
-  //   Number(e.currentTarget.value),
-  // );
-  // console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
-
   if (Number(e.currentTarget.value) + 1 > Number(refs.input.max)) {
-    daysCounter.updateInputsUI(e.currentTarget, refs.input.max);
+    updateInputsUI(refs.input.max);
   }
 
   if (
     Number(e.currentTarget.value) - 1 < Number(refs.input.min) ||
     e.currentTarget.value === ''
   ) {
-    daysCounter.updateInputsUI(e.currentTarget, 1);
+    updateInputsUI(1);
   }
 
   console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
-  console.log('🚀 ~ e', e);
 
-  daysCounter.updateInputsUI(e.currentTarget, e.currentTarget.value);
+  updateInputsUI(e.currentTarget.value);
 });
 
 // refs.form.addEventListener('submit', onFormSubmit);
@@ -86,41 +57,48 @@ function onMathBtnsClick(e) {
     default:
       break;
   }
-  daysCounter.updateInputsUI('', refs.input.value);
+  updateInputsUI(refs.input.value);
 }
 
 function total(days) {
-  // const days = Number(days);
   let sum = 0;
 
   for (let i = 1; i <= days; i += 1) {
     sum += i;
   }
-  // message = `За ${days} дня/днів/день назбираєш сумму: ${sum}, \nА за 365 днів: 66795.`;
-  let daysText = 'день';
-  (() => {
-    const digits = days.toString().split('');
-    const lastDigit = Number(digits.pop());
-    const preLastDigit = Number(digits[digits.length - 1]);
-    console.log(days);
-    if (days > 1 && days < 5) {
-      daysText = 'дня';
-    }
-    if (days >= 5) {
-      daysText = 'днів';
-    }
-    if (days > 20 && preLastDigit !== 1) {
-      if (lastDigit === 1) {
-        daysText = 'день';
-      }
-      if (lastDigit > 1 && lastDigit < 5) {
-        daysText = 'дня';
-      }
-    }
-  })();
-  console.log(daysText);
+
+  const daysText = transformTheWordAccordingToTheNumeral(days);
+
+  console.log(`За ${days} ${daysText} назбираєш сумму: ${sum} грн.`);
 
   return `За ${days} ${daysText} назбираєш сумму: ${sum} грн.`;
+}
+
+function transformTheWordAccordingToTheNumeral(days) {
+  const digits = days.toString().split('');
+  const lastDigit = Number(digits.pop());
+  const preLastDigit = Number(digits[digits.length - 1]);
+  let daysText = 'день';
+
+  if (days > 1 && days < 5) {
+    daysText = 'дня';
+  }
+
+  if (days >= 5) {
+    daysText = 'днів';
+  }
+
+  if (days > 20 && preLastDigit !== 1) {
+    if (lastDigit === 1) {
+      daysText = 'день';
+    }
+
+    if (lastDigit > 1 && lastDigit < 5) {
+      daysText = 'дня';
+    }
+  }
+
+  return daysText;
 }
 
 // function onFormSubmit(event) {
@@ -137,8 +115,13 @@ function total(days) {
 // }
 
 function redrawResultMessage() {
-  // const days = Number(new FormData(refs.form).get('days'));
   const days = new FormData(refs.form).get('days');
 
   refs.result.textContent = total(days);
+}
+
+function updateInputsUI(newNumberOfDays) {
+  refs.inputRange.value = newNumberOfDays;
+  refs.input.value = newNumberOfDays;
+  redrawResultMessage();
 }
