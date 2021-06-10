@@ -101,6 +101,18 @@ function transformTheWordAccordingToTheNumeral(days) {
   return daysText;
 }
 
+function redrawResultMessage() {
+  const days = new FormData(refs.form).get('days');
+
+  refs.result.textContent = total(days);
+}
+
+function updateInputsUI(newNumberOfDays) {
+  refs.inputRange.value = newNumberOfDays;
+  refs.input.value = newNumberOfDays;
+  redrawResultMessage();
+}
+
 // function onFormSubmit(event) {
 //   // console.log(event);
 //   event.preventDefault();
@@ -113,15 +125,3 @@ function transformTheWordAccordingToTheNumeral(days) {
 //   // console.log(total(days));
 //   refs.result.textContent = total(days);
 // }
-
-function redrawResultMessage() {
-  const days = new FormData(refs.form).get('days');
-
-  refs.result.textContent = total(days);
-}
-
-function updateInputsUI(newNumberOfDays) {
-  refs.inputRange.value = newNumberOfDays;
-  refs.input.value = newNumberOfDays;
-  redrawResultMessage();
-}
