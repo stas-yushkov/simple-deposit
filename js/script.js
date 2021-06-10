@@ -9,15 +9,15 @@ const refs = {
 
 const INITIAL_NUMBER_OF_DAYS = 365;
 const daysCounter = {
-  updateInputsUI(event, newNumberOfDays) {
+  updateInputsUI(inputObject, newNumberOfDays) {
     if (event) {
-      if (Number(event.currentTarget.value) + 1 > Number(refs.input.max)) {
+      if (Number(inputObject.value) + 1 > Number(refs.input.max)) {
         daysCounter.updateInputsUI('', refs.input.max);
       }
 
       if (
-        Number(event.currentTarget.value) - 1 < Number(refs.input.min) ||
-        event.currentTarget.value === '' ||
+        Number(inputObject.value) - 1 < Number(refs.input.min) ||
+        inputObject.value === '' ||
         newNumberOfDays === ''
       ) {
         daysCounter.updateInputsUI('', 1);
@@ -33,7 +33,7 @@ const daysCounter = {
 daysCounter.updateInputsUI('', INITIAL_NUMBER_OF_DAYS);
 
 refs.inputRange.addEventListener('input', e => {
-  daysCounter.updateInputsUI(e, e.currentTarget.value);
+  daysCounter.updateInputsUI(e.currentTarget, e.currentTarget.value);
 });
 
 refs.input.addEventListener('input', e => {
@@ -44,21 +44,21 @@ refs.input.addEventListener('input', e => {
   // );
   // console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
 
-  // if (Number(e.currentTarget.value) + 1 > Number(refs.input.max)) {
-  //   daysCounter.updateInputsUI(refs.input.max);
-  // }
+  if (Number(e.currentTarget.value) + 1 > Number(refs.input.max)) {
+    daysCounter.updateInputsUI(e.currentTarget, refs.input.max);
+  }
 
-  // if (
-  //   Number(e.currentTarget.value) - 1 < Number(refs.input.min) ||
-  //   e.currentTarget.value === ''
-  // ) {
-  //   daysCounter.updateInputsUI(1);
-  // }
+  if (
+    Number(e.currentTarget.value) - 1 < Number(refs.input.min) ||
+    e.currentTarget.value === ''
+  ) {
+    daysCounter.updateInputsUI(e.currentTarget, 1);
+  }
 
   console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
   console.log('🚀 ~ e', e);
 
-  daysCounter.updateInputsUI(e, e.currentTarget.value);
+  daysCounter.updateInputsUI(e.currentTarget, e.currentTarget.value);
 });
 
 // refs.form.addEventListener('submit', onFormSubmit);
