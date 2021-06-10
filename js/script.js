@@ -10,7 +10,7 @@ const refs = {
 const INITIAL_NUMBER_OF_DAYS = 365;
 const daysCounter = {
   updateInputsUI(inputObject, newNumberOfDays) {
-    if (event) {
+    if (inputObject) {
       if (Number(inputObject.value) + 1 > Number(refs.input.max)) {
         daysCounter.updateInputsUI('', refs.input.max);
       }
@@ -67,14 +67,13 @@ refs.addBtn.addEventListener('click', onMathBtnsClick);
 refs.subBtn.addEventListener('click', onMathBtnsClick);
 
 function onMathBtnsClick(e) {
-  let newValue = 0;
   switch (e.currentTarget.dataset.action) {
     case 'add':
       if (Number(refs.input.value) + 1 > Number(refs.input.max)) {
         return;
       }
 
-      newValue = Number(refs.input.value) + 1;
+      refs.input.value = Number(refs.input.value) + 1;
       break;
 
     case 'sub':
