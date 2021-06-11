@@ -15,7 +15,12 @@ refs.inputRange.addEventListener(
   'input',
   _.throttle(onRangeInput, THROTTLE_MS),
 );
-refs.input.addEventListener('input', _.throttle(onInput, THROTTLE_MS));
+refs.input.addEventListener(
+  'input',
+  // _.debounce(onInput, THROTTLE_MS, { leading: false, trailing: true }),
+  _.throttle(onInput, THROTTLE_MS),
+  // _.debounce(onInput, THROTTLE_MS),
+);
 refs.addBtn.addEventListener('click', onMathBtnsClick);
 refs.subBtn.addEventListener('click', onMathBtnsClick);
 // refs.form.addEventListener('submit', onFormSubmit);
