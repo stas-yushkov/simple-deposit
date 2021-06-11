@@ -6,41 +6,46 @@ const refs = {
   addBtn: document.querySelector('button[data-action="add"]'),
   subBtn: document.querySelector('button[data-action="sub"]'),
 };
-
 const INITIAL_NUMBER_OF_DAYS = 365;
 
 updateInputsUI(INITIAL_NUMBER_OF_DAYS);
 
-refs.inputRange.addEventListener('input', e => {
-  updateInputsUI(e.currentTarget.value);
-});
+refs.inputRange.addEventListener('input', onRangeInput);
+refs.input.addEventListener('input', onInput);
+refs.addBtn.addEventListener('click', onMathBtnsClick);
+refs.subBtn.addEventListener('click', onMathBtnsClick);
+// refs.form.addEventListener('submit', onFormSubmit);
 
-refs.input.addEventListener('input', e => {
-  if (Number(e.currentTarget.value) + 1 > Number(refs.input.max)) {
+function onRangeInput() {
+  updateInputsUI(refs.inputRange.value);
+}
+
+function onInput() {
+  const isIncrementedValueGreaterThanMax =
+    Number(refs.input.value) + 1 > Number(refs.input.max);
+  const isDecrementedValueLessThanMin =
+    Number(refs.input.value) - 1 < Number(refs.input.min);
+
+  if (isIncrementedValueGreaterThanMax) {
     updateInputsUI(refs.input.max);
   }
 
-  if (
-    Number(e.currentTarget.value) - 1 < Number(refs.input.min) ||
-    e.currentTarget.value === ''
-  ) {
-    updateInputsUI(1);
+  if (isDecrementedValueLessThanMin || !refs.input.value) {
+    updateInputsUI(Number(refs.input.min));
   }
 
-  console.log('🚀 ~ e.currentTarget.value', e.currentTarget.value);
-
-  updateInputsUI(e.currentTarget.value);
-});
-
-// refs.form.addEventListener('submit', onFormSubmit);
-
-refs.addBtn.addEventListener('click', onMathBtnsClick);
-refs.subBtn.addEventListener('click', onMathBtnsClick);
+  updateInputsUI(refs.input.value);
+}
 
 function onMathBtnsClick(e) {
+  const isIncrementedValueGreaterThanMax =
+    Number(refs.input.value) + 1 > Number(refs.input.max);
+  const isDecrementedValueLessThanMin =
+    Number(refs.input.value) - 1 < Number(refs.input.min);
+
   switch (e.currentTarget.dataset.action) {
     case 'add':
-      if (Number(refs.input.value) + 1 > Number(refs.input.max)) {
+      if (isIncrementedValueGreaterThanMax) {
         return;
       }
 
@@ -48,16 +53,46 @@ function onMathBtnsClick(e) {
       break;
 
     case 'sub':
-      if (Number(refs.input.value) - 1 < Number(refs.input.min)) {
+      if (isDecrementedValueLessThanMin) {
         return;
       }
       refs.input.value = Number(refs.input.value) - 1;
       break;
-
-    default:
-      break;
   }
   updateInputsUI(refs.input.value);
+}
+
+function updateInputsUI(newNumberOfDays) {
+  refs.inputRange.value = newNumberOfDays;
+  refs.input.value = newNumberOfDays;
+  redrawMarkup();
+}
+
+function transformTheWordAccordingToTheNumeral(days) {
+  const digits = days.toString().split('');
+  const lastDigit = Number(digits.pop());
+  const preLastDigit = Number(digits[digits.length - 1]);
+  let daysString = 'день';
+
+  if (days > 1 && days < 5) {
+    daysString = 'дня';
+  }
+
+  if (days >= 5) {
+    daysString = 'днів';
+  }
+
+  if (days > 20 && preLastDigit !== 1) {
+    if (lastDigit === 1) {
+      daysString = 'день';
+    }
+
+    if (lastDigit > 1 && lastDigit < 5) {
+      daysString = 'дня';
+    }
+  }
+
+  return daysString;
 }
 
 function total(days) {
@@ -67,50 +102,17 @@ function total(days) {
     sum += i;
   }
 
-  const daysText = transformTheWordAccordingToTheNumeral(days);
+  const daysString = transformTheWordAccordingToTheNumeral(days);
 
-  console.log(`За ${days} ${daysText} назбираєш сумму: ${sum} грн.`);
+  console.log(`За ${days} ${daysString} назбираєш сумму: ${sum} грн.`);
 
-  return `За ${days} ${daysText} назбираєш сумму: ${sum} грн.`;
+  return `За ${days} ${daysString} назбираєш сумму: ${sum} грн.`;
 }
 
-function transformTheWordAccordingToTheNumeral(days) {
-  const digits = days.toString().split('');
-  const lastDigit = Number(digits.pop());
-  const preLastDigit = Number(digits[digits.length - 1]);
-  let daysText = 'день';
-
-  if (days > 1 && days < 5) {
-    daysText = 'дня';
-  }
-
-  if (days >= 5) {
-    daysText = 'днів';
-  }
-
-  if (days > 20 && preLastDigit !== 1) {
-    if (lastDigit === 1) {
-      daysText = 'день';
-    }
-
-    if (lastDigit > 1 && lastDigit < 5) {
-      daysText = 'дня';
-    }
-  }
-
-  return daysText;
-}
-
-function redrawResultMessage() {
+function redrawMarkup() {
   const days = new FormData(refs.form).get('days');
 
   refs.result.textContent = total(days);
-}
-
-function updateInputsUI(newNumberOfDays) {
-  refs.inputRange.value = newNumberOfDays;
-  refs.input.value = newNumberOfDays;
-  redrawResultMessage();
 }
 
 // function onFormSubmit(event) {
