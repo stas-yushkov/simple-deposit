@@ -7,11 +7,15 @@ const refs = {
   subBtn: document.querySelector('button[data-action="sub"]'),
 };
 const INITIAL_NUMBER_OF_DAYS = 365;
+const THROTTLE_MS = 100;
 
 updateInputsUI(INITIAL_NUMBER_OF_DAYS);
 
-refs.inputRange.addEventListener('input', onRangeInput);
-refs.input.addEventListener('input', onInput);
+refs.inputRange.addEventListener(
+  'input',
+  _.throttle(onRangeInput, THROTTLE_MS),
+);
+refs.input.addEventListener('input', _.throttle(onInput, THROTTLE_MS));
 refs.addBtn.addEventListener('click', onMathBtnsClick);
 refs.subBtn.addEventListener('click', onMathBtnsClick);
 // refs.form.addEventListener('submit', onFormSubmit);
